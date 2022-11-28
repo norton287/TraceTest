@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:MauiApp1.ViewModel"
+             xmlns:models="clr-namespace:MauiApp1.Models"
+             x:DataType="vm:MainPageViewModel"
+             x:Class="MauiApp1.MainPage">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Spacing="25"
+            Padding="30,20"
+            VerticalOptions="Fill">
+
+            <!--  Grid for Picker -->
+            <Grid
+                ColumnDefinitions="Auto, *, Auto"
+                RowDefinitions="*"
+                ColumnSpacing="0"
+                RowSpacing="0">
+
+                <!--  Server picker  -->
+                <Picker x:Name="ServerPicker"
+                        Grid.Column="1"
+                        FontSize="{OnIdiom Default=14, Phone=12}"
+                        TextColor="Black"
+                        Title="Choose A Server"
+                        TitleColor="Black"
+                        HorizontalOptions="Fill"
+                        VerticalOptions="Center"
+                        ItemsSource="{Binding Servers, Mode=TwoWay}"
+                        ItemDisplayBinding="{Binding Server, Mode=TwoWay}"
+                        SelectedIndexChanged="ServerPicker_OnSelectedIndexChanged">
+                    <Picker.Margin>
+                        <OnPlatform x:TypeArguments="Thickness">
+                            <On Platform="Android">
+                                <OnIdiom x:TypeArguments="Thickness"
+                                         Phone="4, 4, 15, 4"
+                                         Tablet="8, 8, 15, 8" />
+                            </On>
+                        </OnPlatform>
+                    </Picker.Margin>
+                </Picker>
+            </Grid>
+
+            <Button
+                x:Name="ServerClickButton"
+                Text="Do Trace"
+                Clicked="ServerClickButton_OnClicked"
+                HorizontalOptions="Center" />
+
+            <Grid ColumnDefinitions="*"
+                  ColumnSpacing="0"
+                  RowSpacing="0">
+                <ListView x:Name="ServerListView"
+                          ItemsSource="{Binding PingObservableCollection, Mode=TwoWay}"
+                          SelectionMode="None">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="models:PReply">
+                            <ViewCell>
+                                <StackLayout Spacing="0">
+                                    <Grid
+                                            HeightRequest="30"
+                                            ColumnDefinitions="40,*"
+                                            ColumnSpacing="0"
+                                            RowDefinitions="30"
+                                            RowSpacing="0">
+                                        <StackLayout Orientation="Horizontal"
+                                                         Spacing="25"
+                                                         VerticalOptions="Center"
+                                                         HorizontalOptions="Fill"
+                                                         Margin="15, 0, 0, 0"
+                                                         BackgroundColor="Transparent"
+                                                         Grid.Column="1">
+                                            <Label
+                                                    x:Name="HostLabel"
+                                                    FontSize="{OnIdiom Default=14, Phone=11}"
+                                                    TextColor="{StaticResource Secondary}"
+                                                    Text="{Binding Address}" />
+                                            <Label x:Name="StatusLabel"
+                                                       Text="{Binding Status}"
+                                                       FontSize="{OnIdiom Default=14, Phone=11}"
+                                                       TextColor="Black" />
+                                            <Label x:Name="RTTLabel"
+                                                       FontSize="{OnIdiom Default=14, Phone=11}"
+                                                       TextColor="Black"
+                                                       HorizontalOptions="End">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span FontAttributes="Bold" Text="RTT = " />
+                                                        <Span FontAttributes="Bold" Text="{Binding RoundtripTime}" />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </StackLayout>
+                                    </Grid>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
